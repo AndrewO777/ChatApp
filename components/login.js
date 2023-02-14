@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet,
+        Button } from 'react-native';
 
 
 export default function Login() {
@@ -7,15 +8,19 @@ export default function Login() {
 
     return (
 
+    <TouchableOpacity>
         <View style={styles.container}>
-            <Text style={styles.text}>Username </Text>
                 <TextInput style={styles.input} placeholder=" Username" />
-            <Text style={styles.text}>Password </Text>
                 <TextInput style={styles.input} placeholder=" Password" />
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.signUp}>Sign Up</Text>
-            </TouchableOpacity>
+                            <Button style={styles.button} title="Login" />
         </View>
+        <View style={styles.signUpContainer}>
+            <Text>Don't have an account? 
+                <Text style={styles.signUp}>  Sign Up</Text>
+            </Text>
+
+        </View>
+    </TouchableOpacity>
 )}
 
 
@@ -29,15 +34,26 @@ container: {
 },
 input: {
     height: 40,
-    width: 300,
+    width: 250,
     borderColor: '#000',
     borderWidth: 2,
     borderRadius: 15,
     margin: 10,
 },
+signUpContainer: {
+    marginBottom: 20,   
+},
 signUp: {
     color: '#0000FF',
     marginLeft: 10,
+},
+button: {
+    backgroundColor: '#fff',
+    borderColor: '#0000FF',
+    borderWidth: 2,
+    width: 200,
+    height: 40,
+    borderRadius: 15,
 },
 text: {
     marginLeft: 10,
