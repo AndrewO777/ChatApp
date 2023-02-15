@@ -20,7 +20,7 @@ export default function Signup({navigation}) {
             <TextInput style={styles.input} placeholder=" Confirm Password" />
             <View style={styles.btnWrapper}>
                 <TouchableOpacity style={styles.signUpBtn}>
-                    <Button style={styles.button} title="Sign Up" />
+                    <Text style={styles.signUpBtnText}>Sign Up</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -83,6 +83,11 @@ signUpBtn: {
     alignItems: 'center',
     width: '100%',
     height: 55,
+},
+signUpBtnText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold'
 },
 signUpContainer: {
     position: 'absolute',

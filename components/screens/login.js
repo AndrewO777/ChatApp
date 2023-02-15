@@ -18,8 +18,8 @@ export default function Login({navigation}) {
             <TextInput style={styles.input} placeholder=" Username" />
             <TextInput style={styles.input} placeholder=" Enter Password" />  
             <View style={styles.btnWrapper}>
-                <TouchableOpacity style={styles.signUpBtn}>
-                    <Button style={styles.button} title="Login" />
+                <TouchableOpacity style={styles.loginBtn}>
+                    <Text style={styles.loginBtnText}>Login</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -76,12 +76,17 @@ btnWrapper: {
     elevation: 5,
     borderRadius: 30,
 },
-signUpBtn: {
+loginBtn: {
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     height: 55,
+},
+loginBtnText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
 },
 signUpContainer: {
     position: 'absolute',
