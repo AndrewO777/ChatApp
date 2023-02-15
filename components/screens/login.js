@@ -8,56 +8,89 @@ export default function Login({navigation}) {
 
     return (
 
-    <SafeAreaView style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <TouchableOpacity>
-            <View style={styles.welcome}>
-                    <Text style={styles.welcome}>Welcome Back</Text>
-            </View>
-            <View style={styles.container}>
-                    <TextInput style={styles.input} placeholder=" Username" />
-                    <TextInput style={styles.input} placeholder=" Password" />
+        <SafeAreaView style={styles.main}>
+        <View style={styles.container}>
+        <View>
+            <Text style={styles.welcome}>Welcome Back</Text>
+        </View>
+        
+        <View>
+            <TextInput style={styles.input} placeholder=" Username" />
+            <TextInput style={styles.input} placeholder=" Enter Password" />  
+            <View style={styles.btnWrapper}>
+                <TouchableOpacity style={styles.signUpBtn}>
                     <Button style={styles.button} title="Login" />
+                </TouchableOpacity>
             </View>
-            <View style={styles.signUpContainer}>
-                    <Text>Don't have an account? 
-                    <Text style={styles.signUp} onPress={() => navigation.navigate("Sign Up")}>  Sign Up</Text>
-                    </Text>
-            </View>
-        </TouchableOpacity>
+        </View>
+
+        <View style={styles.signUpContainer}>
+            <Text>Don't have an account?</Text> 
+                <TouchableOpacity onPress={() => navigation.navigate("Sign Up")}>
+                    <Text style={styles.signUp}>  Sign Up</Text>
+                </TouchableOpacity>
+        </View>
+        </View>
     </SafeAreaView>
+)}
 
 
-    )}
 
 const styles = StyleSheet.create({
-
-container: {
-    justifyContent: 'center',
+main: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+},
+container: {
+    padding: 15,
+    width: '100%',
+    position: 'relative',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
 },
 welcome: {
     fontSize: 40,
-    marginTop: 80,
-    fontWeight: 'bold',
 },
 input: {
-    height: 40,
-    width: 250,
+    height: 55,
+    width: 300,
     borderColor: '#000',
     borderWidth: 2,
-    borderRadius: 15,
+    borderRadius: 30,
     margin: 20,
 },
+btnWrapper: {
+    height: 55,
+    marginTop: 12,
+    backgroundColor: '#3d3d3d',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
+    elevation: 5,
+    borderRadius: 30,
+},
+signUpBtn: {
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: 55,
+},
 signUpContainer: {
-    marginTop: 20,
-    marginBottom: 20,   
-    marginLeft: 40,
+    position: 'absolute',
+    bottom: 20, 
+    textAlign: 'center',
+    flexDirection: 'row',
 },
 signUp: {
     color: '#0000FF',
-    marginLeft: 10,
-},
-text: {
     marginLeft: 10,
 },
 });
