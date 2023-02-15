@@ -1,29 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import Login from './components/login';
-import Signup from './components/signup';
-import Header from './components/header';
+import React from 'react';
+import Navigator from './components/routes/navigator'
+import { NavigationContainer } from '@react-navigation/native';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Header />
-        <View style={styles.content}>
-          <Signup />
-        </View>
-    </View>
+    <NavigationContainer >
+          <Navigator />
+    </NavigationContainer>
+ 
+    
   );
 }
 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-});
+// const styles = StyleSheet.create({
+ 
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//   }
+// });
 
