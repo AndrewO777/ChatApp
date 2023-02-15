@@ -3,23 +3,24 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet,
         Button } from 'react-native';
 
 
-export default function Login() {
+export default function Signup() {
 
 
     return (
 
     <TouchableOpacity>
         <View>
-            <Text style={styles.welcome}>Welcome Back</Text>
+            <Text style={styles.welcome}>Welcome</Text>
         </View>
         <View style={styles.container}>
             <TextInput style={styles.input} placeholder=" Username" />
-            <TextInput style={styles.input} placeholder=" Password" />
-            <Button style={styles.button} title="Login" />
+            <TextInput style={styles.input} placeholder=" Enter Password" />  
+            <TextInput style={styles.input} placeholder=" Re-enter Password" />
+            <Button style={styles.button} title="Sign Up" />
         </View>
         <View style={styles.signUpContainer}>
-            <Text>Don't have an account? 
-             <Text style={styles.signUp}>  Sign Up</Text>
+            <Text>Already have an account? 
+             <Text style={styles.signUp}>  Login</Text>
             </Text>
 
         </View>
@@ -31,12 +32,12 @@ export default function Login() {
 const styles = StyleSheet.create({
 
 container: {
-    backgroundColor: '#fff',
     justifyContent: 'center',
     flex: 1,
 },
 welcome: {
     fontSize: 40,
+    marginLeft: 50,
     marginTop: 80,
     fontWeight: 'bold',
 },
