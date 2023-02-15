@@ -9,7 +9,7 @@ export default function App() {
     <View style={styles.container}>
       <Header />
         <View style={styles.content}>
-          <Login />
+          <Signup />
         </View>
     </View>
   );
@@ -19,11 +19,11 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   content: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 });
 
