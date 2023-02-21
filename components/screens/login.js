@@ -1,22 +1,30 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,
-        Button, SafeAreaView } from 'react-native';
-
+        Button, SafeAreaView, TouchableWithoutFeedback,
+         KeyboardAvoidingView, Keyboard } from 'react-native';
 
 export default function Login({navigation}) {
 
 
     return (
-
+        <TouchableWithoutFeedback onPress={() => {
+            Keyboard.dismiss();
+        }}>
         <SafeAreaView style={styles.main}>
+        <KeyboardAvoidingView behavior='padding'>
         <View style={styles.container}>
+        <View>
+        </View>
         <View>
             <Text style={styles.welcome}>Welcome Back</Text>
         </View>
         
         <View>
-            <TextInput style={styles.input} placeholder=" Username" />
-            <TextInput style={styles.input} placeholder=" Enter Password" />  
+            <TextInput style={styles.input} placeholder=" Email Address" />
+            <TextInput style={styles.input} 
+                placeholder=" Enter Password" 
+                secureTextEntry
+            />  
             <View style={styles.btnWrapper}>
                 <TouchableOpacity style={styles.loginBtn}>
                     <Text style={styles.loginBtnText}>Login</Text>
@@ -31,7 +39,9 @@ export default function Login({navigation}) {
                 </TouchableOpacity>
         </View>
         </View>
+        </KeyboardAvoidingView>
     </SafeAreaView>
+    </TouchableWithoutFeedback>
 )}
 
 

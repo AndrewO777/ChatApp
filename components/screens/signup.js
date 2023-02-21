@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,
-        Button, SafeAreaView, TouchableWithoutFeedback, Keyboard} from 'react-native';
+        Button, SafeAreaView, TouchableWithoutFeedback, Keyboard,
+        KeyboardAvoidingView} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient'
+import { auth } from '../firebase/firebase';
 
 
 export default function Signup({navigation}) {
 
  // text fields input
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -35,17 +37,32 @@ export default function Signup({navigation}) {
         }
     }
 
+    const handleSignUp = () => {
+        auth
+            .createUserWithEmailAndPassword(email, password)
+            .then(userCredentials => {
+                const user = userCredentials.user;
+            })
+            .catch(error => alert(error.message));
+    };
+
+    const handlePress = () => {
+        setIsPressed(true);
+        if (isMatched) {
+            handleSignUp();
+        }
+    }
+
     useEffect (() => {
         passwordCheck();
     }, [password, confirmPassword]); 
-
-    console.log({username});
 
     return (
     <TouchableWithoutFeedback onPress={() => {
         Keyboard.dismiss();
     }}>
       <SafeAreaView style={styles.main}>
+        <KeyboardAvoidingView behavior='padding'>
         <View style={styles.container}>
         <View>
             <Text style={styles.welcome}>New Account</Text>
@@ -54,26 +71,28 @@ export default function Signup({navigation}) {
         <View>
             <TextInput 
                 style={styles.input} 
-                placeholder=" Username" 
-                onChangeText={(val) => setUsername(val)}
+                placeholder=" Email Address" 
+                onChangeText={(val) => setEmail(val)}
             />
             <Text>{usernameError}</Text>
             <TextInput 
                 style={styles.input} 
                 placeholder=" Enter Password" 
                 onChangeText={(val) => setPassword(val)}
+                secureTextEntry
             />  
             <TextInput 
                 style={styles.input} 
                 placeholder=" Confirm Password" 
                 onChangeText={(val) => setConfirmPassword(val)}
+                secureTextEntry
             />
             <Text style={styles.error}>{(isPressed) && confirmPasswordError}</Text>
 
             <View style={styles.btnWrapper}>
                 <TouchableOpacity 
                     style={styles.signUpBtn}
-                    onPress={() => setIsPressed(true)}
+                    onPress={handlePress}
                     >
                     <Text style={styles.signUpBtnText}>Sign Up</Text>
                 </TouchableOpacity>
@@ -87,6 +106,7 @@ export default function Signup({navigation}) {
                 </TouchableOpacity>
         </View>
         </View>
+    </KeyboardAvoidingView>
     </SafeAreaView>
     </TouchableWithoutFeedback>
 )}
