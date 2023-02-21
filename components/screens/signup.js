@@ -1,25 +1,80 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,
-        Button, SafeAreaView } from 'react-native';
+        Button, SafeAreaView, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient'
 
 
 export default function Signup({navigation}) {
 
+ // text fields input
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+ // error messages
+    const [usernameError, setUsernameError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
+ // boolean fields
+    const [isSetPassword, setIsSetPassword] = useState(false);
+    const [isConfirmPassword, setIsConfirmPassword] = useState(false);
+    const [isMatched, setIsMatched] = useState(false);
+    const [isPressed, setIsPressed] = useState(false);
+
+ // checks to see if passwords match
+    const passwordCheck = () => {
+        if (password != confirmPassword) {
+            setConfirmPasswordError('Passwords do not match');
+            setIsMatched(false);
+        }
+        else 
+        {
+            setConfirmPasswordError('');
+            setIsMatched(true);
+        }
+    }
+
+    useEffect (() => {
+        passwordCheck();
+    }, [password, confirmPassword]); 
+
+    console.log({username});
 
     return (
-    <SafeAreaView style={styles.main}>
+    <TouchableWithoutFeedback onPress={() => {
+        Keyboard.dismiss();
+    }}>
+      <SafeAreaView style={styles.main}>
         <View style={styles.container}>
         <View>
             <Text style={styles.welcome}>New Account</Text>
         </View>
         
         <View>
-            <TextInput style={styles.input} placeholder=" Username" />
-            <TextInput style={styles.input} placeholder=" Enter Password" />  
-            <TextInput style={styles.input} placeholder=" Confirm Password" />
+            <TextInput 
+                style={styles.input} 
+                placeholder=" Username" 
+                onChangeText={(val) => setUsername(val)}
+            />
+            <Text>{usernameError}</Text>
+            <TextInput 
+                style={styles.input} 
+                placeholder=" Enter Password" 
+                onChangeText={(val) => setPassword(val)}
+            />  
+            <TextInput 
+                style={styles.input} 
+                placeholder=" Confirm Password" 
+                onChangeText={(val) => setConfirmPassword(val)}
+            />
+            <Text style={styles.error}>{(isPressed) && confirmPasswordError}</Text>
+
             <View style={styles.btnWrapper}>
-                <TouchableOpacity style={styles.signUpBtn}>
+                <TouchableOpacity 
+                    style={styles.signUpBtn}
+                    onPress={() => setIsPressed(true)}
+                    >
                     <Text style={styles.signUpBtnText}>Sign Up</Text>
                 </TouchableOpacity>
             </View>
@@ -33,6 +88,7 @@ export default function Signup({navigation}) {
         </View>
         </View>
     </SafeAreaView>
+    </TouchableWithoutFeedback>
 )}
 
 
@@ -98,5 +154,8 @@ signUpContainer: {
 signUp: {
     color: '#0000FF',
     marginLeft: 10,
+},
+error: {
+    color: 'red',
 },
 });
