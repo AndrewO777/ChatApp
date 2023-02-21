@@ -8,6 +8,7 @@ export default function Login({navigation}) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     
      const handleLogIn = () => {
         auth
@@ -19,11 +20,21 @@ export default function Login({navigation}) {
             .catch(error => alert(error.message));
     };
 
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            if (user) {
+                navigation.replace("Home Screen");
+                setIsLoggedIn(true);
+            }
+        })
+    })
+
     return (
         <TouchableWithoutFeedback onPress={() => {
             Keyboard.dismiss();
         }}>
         <SafeAreaView style={styles.main}>
+        <KeyboardAvoidingView behavior='padding'>
         <View style={styles.container}>
         <View>
         </View>
@@ -59,6 +70,7 @@ export default function Login({navigation}) {
                 </TouchableOpacity>
         </View>
         </View>
+        </KeyboardAvoidingView>
     </SafeAreaView>
     </TouchableWithoutFeedback>
 )}
