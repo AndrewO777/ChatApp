@@ -1,17 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,
         Button, SafeAreaView, TouchableWithoutFeedback,
          KeyboardAvoidingView, Keyboard } from 'react-native';
+import { auth } from '../firebase/firebase';
 
 export default function Login({navigation}) {
 
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    
+     const handleLogIn = () => {
+        auth
+            .signInWithEmailAndPassword(email, password)
+            .then(userCredentials => {
+                const user = userCredentials.user;
+                console.log('Logged in with: ', user.email);
+            })
+            .catch(error => alert(error.message));
+    };
 
     return (
         <TouchableWithoutFeedback onPress={() => {
             Keyboard.dismiss();
         }}>
         <SafeAreaView style={styles.main}>
-        <KeyboardAvoidingView behavior='padding'>
         <View style={styles.container}>
         <View>
         </View>
@@ -20,13 +32,21 @@ export default function Login({navigation}) {
         </View>
         
         <View>
-            <TextInput style={styles.input} placeholder=" Email Address" />
+            <TextInput 
+                style={styles.input} 
+                placeholder=" Email Address" 
+                onChangeText={(val) => setEmail(val)}
+            />
             <TextInput style={styles.input} 
                 placeholder=" Enter Password" 
+                onChangeText={(val) => setPassword(val)}
                 secureTextEntry
             />  
             <View style={styles.btnWrapper}>
-                <TouchableOpacity style={styles.loginBtn}>
+                <TouchableOpacity 
+                    style={styles.loginBtn}
+                    onPress={handleLogIn}
+                >
                     <Text style={styles.loginBtnText}>Login</Text>
                 </TouchableOpacity>
             </View>
@@ -39,7 +59,6 @@ export default function Login({navigation}) {
                 </TouchableOpacity>
         </View>
         </View>
-        </KeyboardAvoidingView>
     </SafeAreaView>
     </TouchableWithoutFeedback>
 )}

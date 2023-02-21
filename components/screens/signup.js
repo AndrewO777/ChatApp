@@ -14,7 +14,7 @@ export default function Signup({navigation}) {
     const [confirmPassword, setConfirmPassword] = useState('');
 
  // error messages
-    const [usernameError, setUsernameError] = useState('');
+    const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
@@ -37,15 +37,19 @@ export default function Signup({navigation}) {
         }
     }
 
+ // creates a new account in google firebase authentication
     const handleSignUp = () => {
         auth
             .createUserWithEmailAndPassword(email, password)
             .then(userCredentials => {
                 const user = userCredentials.user;
+                console.log('Registered with: ', user.email);
+
             })
             .catch(error => alert(error.message));
     };
 
+ // handles the press of sign up button
     const handlePress = () => {
         setIsPressed(true);
         if (isMatched) {
@@ -53,6 +57,7 @@ export default function Signup({navigation}) {
         }
     }
 
+ // calls password check each time one of the password text boxes changes
     useEffect (() => {
         passwordCheck();
     }, [password, confirmPassword]); 
@@ -74,7 +79,7 @@ export default function Signup({navigation}) {
                 placeholder=" Email Address" 
                 onChangeText={(val) => setEmail(val)}
             />
-            <Text>{usernameError}</Text>
+            <Text>{emailError}</Text>
             <TextInput 
                 style={styles.input} 
                 placeholder=" Enter Password" 
