@@ -6,10 +6,11 @@ import { auth } from '../firebase/firebase';
 
 export default function Login({navigation}) {
 
+ // text fields input
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     
+ // handles login using Firebase Authentication
      const handleLogIn = () => {
         auth
             .signInWithEmailAndPassword(email, password)
@@ -20,14 +21,16 @@ export default function Login({navigation}) {
             .catch(error => alert(error.message));
     };
 
+ // checks if user is signed in and redirects to home screen
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             if (user) {
                 navigation.replace("Home Screen");
-                setIsLoggedIn(true);
             }
         })
-    })
+        
+        return unsubscribe
+    }, [])
 
     return (
         <TouchableWithoutFeedback onPress={() => {
@@ -45,6 +48,7 @@ export default function Login({navigation}) {
         <View>
             <TextInput 
                 style={styles.input} 
+                textAlign='left'
                 placeholder=" Email Address" 
                 onChangeText={(val) => setEmail(val)}
             />
