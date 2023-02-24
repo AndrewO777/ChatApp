@@ -105,6 +105,7 @@ input: {
     borderColor: '#000',
     borderWidth: 2,
     borderRadius: 30,
+    paddingLeft: 10,
     margin: 20,
 },
 btnWrapper: {
