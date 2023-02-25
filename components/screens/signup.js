@@ -12,6 +12,7 @@ export default function Signup({navigation}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+   
 
  // error messages
     const [emailError, setEmailError] = useState('');
@@ -117,7 +118,6 @@ export default function Signup({navigation}) {
 )}
 
 
-
 const styles = StyleSheet.create({
 main: {
     flex: 1,
@@ -143,6 +143,7 @@ input: {
     borderWidth: 2,
     borderRadius: 30,
     margin: 20,
+    paddingLeft: 10,
 },
 btnWrapper: {
     height: 55,
