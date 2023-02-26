@@ -4,12 +4,14 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet,
         KeyboardAvoidingView} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient'
 import { auth } from '../firebase/firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Signup({navigation}) {
 
  // text fields input
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
    
@@ -38,6 +40,14 @@ export default function Signup({navigation}) {
         }
     }
 
+    const setUser = async () => {
+        try {
+            await AsyncStorage.setItem('user', username);
+        } catch (error) {
+            alert(error)
+        }
+    }
+
  // creates a new account in google firebase authentication
     const handleSignUp = () => {
         auth
@@ -48,6 +58,7 @@ export default function Signup({navigation}) {
 
             })
             .catch(error => alert(error.message));
+            setUser();
     };
 
  // handles the press of sign up button
@@ -79,6 +90,11 @@ export default function Signup({navigation}) {
                 style={styles.input} 
                 placeholder=" Email Address" 
                 onChangeText={(val) => setEmail(val)}
+            />
+             <TextInput 
+                style={styles.input} 
+                placeholder=" Username" 
+                onChangeText={(val) => setUsername(val)}
             />
             <Text>{emailError}</Text>
             <TextInput 

@@ -12,11 +12,12 @@ const Stack = createNativeStackNavigator();
 
 export default function Navigator() {
 
-    const [username, setUsername] = useState();
+const [username, setUsername] = useState();
 
 const load = async () => {
     try {
-        let username = await AsyncStorage.getItem('username')
+        let username = await AsyncStorage.getItem('user')
+        console.log(username);
         setUsername(username);
     } catch (err) {
         alert(err);

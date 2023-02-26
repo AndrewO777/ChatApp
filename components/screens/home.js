@@ -49,7 +49,7 @@ export default function Home() {
             Keyboard.dismiss();
         }}>
     	<ScrollView>
-            <Modal
+            {/* <Modal
                 style={styles.container}
                 visible={usernameModalVisible}
                 presentationStyle="formSheet"
@@ -70,7 +70,7 @@ export default function Home() {
                     </TouchableOpacity>
                     </View>
                 </View> 
-            </Modal>
+            </Modal> */}
 	        {chats}
     	</ScrollView>
         </TouchableWithoutFeedback>
