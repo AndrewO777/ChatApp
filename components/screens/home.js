@@ -3,20 +3,40 @@ import {View, Text, TextInput, StyleSheet,
         ScrollView, Modal, TouchableOpacity,
         TouchableWithoutFeedback, Keyboard } from 'react-native'
 import Chat from "./chat"
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home() {
     const [usernameModalVisible, setUsernameModalVisible] = useState(false);
     const [username, setUsername] = useState();
-    const [isUsernameSet, setIsUsernameSet] = useState(false);
+    const [isUsernameSet, setIsUsernameSet] = useState();
+
     
     const handleSubmit = () => {
         setIsUsernameSet(true);
        
     }
+
+    const createUser = async () => {
+        try {
+            await AsyncStorage.setItem('username', username)
+            setIsUsernameSet(true);
+        } catch (err) {
+            alert(err)
+        }
+        setUsernameModalVisible(false)
+    }
+
+    const load = async () => {
+        try {
+            let username = await AsyncStorage.getItem('username');
+        } catch (err) {
+            alert(err);
+        }
+    }
     
     useEffect(() => {
-        if (!isUsernameSet) {
-            setUsernameModalVisible(true);
+        if (username !== null) {
+            setUsernameModalVisible(false);
         }
    },[])
 
@@ -44,7 +64,7 @@ export default function Home() {
                     <View style={styles.btnWrapper}>
                     <TouchableOpacity 
                         style={styles.setUsernameBtn}
-                        onPress={() => setUsernameModalVisible(false)}
+                        onPress={() => createUser()}
                         >
                         <Text style={styles.usernameBtnText}>Submit</Text>
                     </TouchableOpacity>
