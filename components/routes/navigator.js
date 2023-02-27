@@ -13,6 +13,7 @@ const Stack = createNativeStackNavigator();
 export default function Navigator() {
 
 const [username, setUsername] = useState();
+const [logout, setLogout] = useState('Log Out')
 
 const load = async () => {
     try {
@@ -39,15 +40,19 @@ useEffect(() => {
                 <Stack.Screen 
                     name="Login" 
                     component={Login} 
+                    options={{headerBackVisible: false}}
                 />
                 <Stack.Screen 
                     name="Sign Up" 
                     component={Signup} 
+                    options={{headerBackVisible: false}}
                 />
                 <Stack.Screen 
                     name="Home Screen" 
                     component={Home} 
-                    options={{title: (username)}}
+                    options={{title: (username),
+                                headerBackVisible: false,
+                    }}
                 />
             </Stack.Navigator>
     )

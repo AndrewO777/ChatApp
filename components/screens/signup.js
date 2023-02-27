@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,
-        Button, SafeAreaView, TouchableWithoutFeedback, Keyboard,
+        SafeAreaView, TouchableWithoutFeedback, Keyboard,
         KeyboardAvoidingView} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient'
 import { auth } from '../firebase/firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

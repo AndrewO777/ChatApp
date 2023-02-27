@@ -4,8 +4,9 @@ import {View, Text, TextInput, StyleSheet,
         TouchableWithoutFeedback, Keyboard } from 'react-native'
 import Chat from "./chat"
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { auth } from '../firebase/firebase';
 
-export default function Home() {
+export default function Home({navigation}) {
     const [usernameModalVisible, setUsernameModalVisible] = useState(false);
     const [username, setUsername] = useState();
     const [isUsernameSet, setIsUsernameSet] = useState();
@@ -33,11 +34,27 @@ export default function Home() {
             alert(err);
         }
     }
+
+    const signOut = async () => {
+        auth
+            .signOut()
+            .then(() => {
+                console.log('Singed Out')
+                navigation.navigate("Login")
+            })
+    }
     
     useEffect(() => {
         if (username !== null) {
             setUsernameModalVisible(false);
         }
+          navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity onPress={() => signOut()}>
+                    <Text style={{color: 'white', fontSize: 20}}>Log Out</Text>
+                </TouchableOpacity>
+            )
+        })
    },[])
 
     const chats = [];
@@ -49,28 +66,6 @@ export default function Home() {
             Keyboard.dismiss();
         }}>
     	<ScrollView>
-            {/* <Modal
-                style={styles.container}
-                visible={usernameModalVisible}
-                presentationStyle="formSheet"
-            >
-                <View>
-                    <Text style={styles.text}>Create User</Text>
-                    <TextInput 
-                        style={styles.input} 
-                        placeholder="Username"
-                        onChangeText={(val) => setUsername(val)}
-                    />
-                    <View style={styles.btnWrapper}>
-                    <TouchableOpacity 
-                        style={styles.setUsernameBtn}
-                        onPress={() => createUser()}
-                        >
-                        <Text style={styles.usernameBtnText}>Submit</Text>
-                    </TouchableOpacity>
-                    </View>
-                </View> 
-            </Modal> */}
 	        {chats}
     	</ScrollView>
         </TouchableWithoutFeedback>
