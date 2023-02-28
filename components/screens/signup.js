@@ -32,6 +32,8 @@ export default function Signup({navigation}) {
     const usersRef = firebase.firestore().collection('users');
     const [userID, setUserID] = useState();
 
+    let id;
+
     useEffect(() => {
         usersRef
         .onSnapshot(
@@ -88,6 +90,7 @@ export default function Signup({navigation}) {
                     username: username
                 };
                 setUserID(id);
+                console.log(userID);
                 usersRef
                 .add(data)
                 
@@ -120,7 +123,6 @@ export default function Signup({navigation}) {
         passwordCheck();
     }, [password, confirmPassword]); 
 
-    console.log(userID);
 
     return (
     <TouchableWithoutFeedback onPress={() => {
