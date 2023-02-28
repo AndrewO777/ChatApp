@@ -1,14 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,
         Button, SafeAreaView, TouchableWithoutFeedback,
          KeyboardAvoidingView, Keyboard } from 'react-native';
 import { auth } from '../firebase/firebase';
+import { firebase } from '../firebase/firebase';
+import { GlobalContext} from '../../globalContext';
 
 export default function Login({navigation}) {
 
+    const { userID, setUserID} = useContext(GlobalContext);
+    const { username, setUsername} = useContext(GlobalContext);
  // text fields input
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const usersRef = firebase.firestore().collection('users');
+    const [users, setUsers] = useState();
+    let id;
     
  // handles login using Firebase Authentication
      const handleLogIn = () => {
@@ -17,18 +25,47 @@ export default function Login({navigation}) {
             .then(userCredentials => {
                 const user = userCredentials.user;
                 console.log('Logged in with: ', user.email);
+                id = user.uid;
+                setUserID(id);
+                checkUser();
             })
             .catch(error => alert(error.message));
+            
     };
+
+    const checkUser = () => {
+        console.log('should run second');
+         usersRef
+        .onSnapshot(
+            querySnapshot => {
+                const users = []
+                querySnapshot.forEach((doc) => {
+                    const { username, userID } = doc.data()
+                    users.push({ 
+                        id: doc.id,
+                        username,
+                        userID
+                    })
+                })
+                setUsers(users)
+                users.map(users => {
+                    if(users.userID === id) {
+                        setUsername(users.username)
+                    }
+                })
+                
+            }
+        )
+    }
 
  // checks if user is signed in and redirects to home screen
     useEffect(() => {
+
         const unsubscribe = auth.onAuthStateChanged(user => {
             if (user) {
                 navigation.replace("Home Screen");
             }
-        })
-        
+        })      
         return unsubscribe
     }, [])
 

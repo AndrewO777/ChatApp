@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,
         SafeAreaView, TouchableWithoutFeedback, Keyboard,
         KeyboardAvoidingView} from 'react-native';
 import { auth } from '../firebase/firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { firebase } from '../firebase/firebase';
+import { GlobalContext } from '../../globalContext';
 
 
 export default function Signup({navigation}) {
 
  // text fields input
     const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
+    const {username, setUsername} = useContext(GlobalContext);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
    
@@ -26,6 +28,31 @@ export default function Signup({navigation}) {
     const [isMatched, setIsMatched] = useState(false);
     const [isPressed, setIsPressed] = useState(false);
 
+    const [users, setUsers] = useState([]);
+    const usersRef = firebase.firestore().collection('users');
+    const [userID, setUserID] = useState();
+
+    useEffect(() => {
+        usersRef
+        .onSnapshot(
+            querySnapshot => {
+                const users = []
+                querySnapshot.forEach((doc) => {
+                    const { username, userID} = doc.data()
+                    users.push({ 
+                        id: doc.id,
+                        username,
+                        userID
+                    })
+                })
+                setUsers(users)
+            }
+        )
+     
+    }, []);
+
+
+
  // checks to see if passwords match
     const passwordCheck = () => {
         if (password != confirmPassword) {
@@ -39,32 +66,52 @@ export default function Signup({navigation}) {
         }
     }
 
-    const setUser = async () => {
-        try {
-            await AsyncStorage.setItem('user', username);
-        } catch (error) {
-            alert(error)
-        }
-    }
-
- // creates a new account in google firebase authentication
-    const handleSignUp = () => {
-        auth
+    const addUser = async () => {
+        var exists = false;
+        users.map(users => {
+            if (users.username === username) {
+                alert('Username already in use')
+                exists = true;
+            }
+        })
+        if (!exists) {
+            auth
             .createUserWithEmailAndPassword(email, password)
+
             .then(userCredentials => {
                 const user = userCredentials.user;
+                const id = user.uid;
+                AsyncStorage.setItem('userID', id);
                 console.log('Registered with: ', user.email);
+                const data = {
+                    userID: id,
+                    username: username
+                };
+                setUserID(id);
+                usersRef
+                .add(data)
+                
 
             })
-            .catch(error => alert(error.message));
-            setUser();
-    };
+            .catch((error) => {alert(error.message)})
+
+            try {
+                await AsyncStorage.setItem('user', username);
+                // await AsyncStorage.setItem('userID', userID);
+            } catch (error) {
+                    alert(error)
+            }
+
+           
+                
+    }
+}
 
  // handles the press of sign up button
     const handlePress = () => {
         setIsPressed(true);
         if (isMatched) {
-            handleSignUp();
+            addUser()
         }
     }
 
@@ -72,6 +119,8 @@ export default function Signup({navigation}) {
     useEffect (() => {
         passwordCheck();
     }, [password, confirmPassword]); 
+
+    console.log(userID);
 
     return (
     <TouchableWithoutFeedback onPress={() => {

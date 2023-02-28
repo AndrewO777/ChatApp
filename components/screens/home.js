@@ -1,15 +1,18 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {View, Text, TextInput, StyleSheet, 
         ScrollView, Modal, TouchableOpacity,
         TouchableWithoutFeedback, Keyboard } from 'react-native'
 import Chat from "./chat"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth } from '../firebase/firebase';
+import { GlobalContext} from '../../globalContext';
 
 export default function Home({navigation}) {
     const [usernameModalVisible, setUsernameModalVisible] = useState(false);
-    const [username, setUsername] = useState();
+    const {username, setUsername} = useContext(GlobalContext);
+    const {userID, setUserID} = useContext(GlobalContext);
     const [isUsernameSet, setIsUsernameSet] = useState();
+    const [users, setUsers] = useState([]);
 
     
     const handleSubmit = () => {

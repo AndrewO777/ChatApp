@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Login from '../screens/login'
 import Signup from '../screens/signup'
 import Home from '../screens/home'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { firebase } from '../firebase/firebase'
+import { GlobalContext } from '../../globalContext'
 
 
 const Stack = createNativeStackNavigator();
@@ -12,23 +14,12 @@ const Stack = createNativeStackNavigator();
 
 export default function Navigator() {
 
-const [username, setUsername] = useState();
-const [logout, setLogout] = useState('Log Out')
+const {username, setUsername} = useContext(GlobalContext);
+// const usersRef = firebase.firestore().collection('users');
+// const [users, setUsers] = useState();
 
-const load = async () => {
-    try {
-        let username = await AsyncStorage.getItem('user')
-        console.log(username);
-        setUsername(username);
-    } catch (err) {
-        alert(err);
-    }
-}
-
-useEffect(() => {
-    load();
-}, [])
     
+
     return (
             <Stack.Navigator screenOptions={{
                 headerTintColor: 'white',
