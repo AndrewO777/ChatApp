@@ -1,13 +1,65 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ScrollView, View, Text, TextInput, StyleSheet, TouchableHighlight } from "react-native";
 import { GlobalContext } from "../../globalContext";
-import { firebase } from "../firebase/firebase";
+import { firebase, storage } from "../firebase/firebase";
+import { AntDesign } from "@expo/vector-icons";
 
-const messagesRef = firebase.firestore().collection("Messages");
+
+
+//const reference = storage().ref('black-t-shirt-sm.png');
 
 export default function ChatPage({navigation,route}){
+	const [message, setMessage] = useState();
+	// const [messages, setMessages] = useState()
 	const { user } = route.params;
+	const {convoID } = user;
+	const userID = user.id;
+	
+	
+
+	// const sendMessage = () => {
+    //     messagesRef
+    //     .onSnapshot(
+    //         querySnapshot => {
+    //             const messages = []
+    //             querySnapshot.forEach((doc) => {
+    //                 const { message, convoID, userID} = doc.data()
+    //                 messages.push({ 
+    //                     id: doc.id,
+    //                     convoID,
+    //                     userID,
+	// 					message
+    //                 })
+    //             })
+    //             // setMessages(messages)
+    //         }
+    //     )
+	// 		console.log('sent')
+    // };
+
+	const sendMessage = async () => {
+
+		console.log(user)
+		console.log(convoID)
+		console.log(userID)
+		console.log(message)
+		
+		try {
+			const messagesRef = firebase.firestore().collection("Messages");
+			const newDocumentRef = await messagesRef.add({
+			convoID: convoID,
+			sender: userID,
+			message: message,
+			});
+			console.log('New document added with ID:', newDocumentRef.id);
+		} catch (error) {
+			console.log(error);
+			}
+
+	}
+
 	useEffect(() => {
+
 		navigation.setOptions({ title: "Chatting With "+user.name });
 	},[user,navigation]);
 	return (
@@ -15,10 +67,21 @@ export default function ChatPage({navigation,route}){
 			<ScrollView>
 				<Text>{ user.name }</Text>
 			</ScrollView>
+			
 			<View style={ styles.inputWrapper }>
-				<TextInput style={ styles.input }/>
+			{/* <View style={styles.addFileBtn}>
+				<AntDesign
+					name='pluscircle'
+					size={50}
+					onPress={() => console.log('pressed')}
+				/>
+			</View> */}
+				<TextInput 
+					style={ styles.input }
+					onChangeText={(val) => setMessage(val)}
+				/>
 				<TouchableHighlight style={ styles.button }
-					onPress={() => {}}>
+					onPress={sendMessage}>
 					<Text style={{ color: "#fff" }}>Send</Text>
 				</TouchableHighlight>
 			</View>
