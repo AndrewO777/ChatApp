@@ -2,7 +2,9 @@ import React, {useState, useEffect, useContext} from 'react';
 import {View, Text, TextInput, StyleSheet, 
         ScrollView, Modal, TouchableOpacity,
         TouchableWithoutFeedback, Keyboard } from 'react-native'
-import Chat from "./chat"
+import Chat from "./chat";
+import ChatPage from "./chatpage";
+import UserList from "./userList";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth } from '../firebase/firebase';
 import { GlobalContext} from '../../globalContext';
@@ -12,9 +14,14 @@ export default function Home({navigation}) {
     const {username, setUsername} = useContext(GlobalContext);
     const {userID, setUserID} = useContext(GlobalContext);
     const [isUsernameSet, setIsUsernameSet] = useState();
-    const [users, setUsers] = useState([]);
-
+    const [users, setUsers] = useState([
+	{ id: 1, name: "Test User 1" },
+	{ id: 2, name: "Test User 2" },
+	{ id: 3, name: "Test User 3" }
+    ]);
     
+    const HandleUserPress = (user) => { navigation.navigate("Chat Page", { user }); };
+
     const handleSubmit = () => {
         setIsUsernameSet(true);
        
@@ -59,18 +66,12 @@ export default function Home({navigation}) {
             )
         })
    },[])
-
-    const chats = [];
-    for (let i = 0; i < 20; ++i){
-    	chats.push(<Chat key={i} name="test user"/>);
-    }
+    
     return (
         <TouchableWithoutFeedback onPress={() => {
             Keyboard.dismiss();
         }}>
-    	<ScrollView>
-	        {chats}
-    	</ScrollView>
+		<UserList users = { users } onPress={ HandleUserPress }/>
         </TouchableWithoutFeedback>
     )
 }

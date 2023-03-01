@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Login from '../screens/login'
 import Signup from '../screens/signup'
 import Home from '../screens/home'
+import ChatPage from "../screens/chatpage";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { firebase } from '../firebase/firebase'
 import { GlobalContext } from '../../globalContext'
@@ -45,6 +46,13 @@ const {username, setUsername} = useContext(GlobalContext);
                                 headerBackVisible: false,
                     }}
                 />
+	    	<Stack.Screen
+	    		name="Chat Page"
+	    		component={ ChatPage }
+	    		options={{ title: "Chatting",
+					headerBackVisable: true
+			}}
+	    	/>
             </Stack.Navigator>
     )
 }
