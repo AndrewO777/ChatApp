@@ -28,6 +28,12 @@ export default function Login({navigation}) {
                 id = user.uid;
                 setUserID(id);
                 checkUser();
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            if (user) {
+                navigation.replace("Home Screen");
+            }
+        })
+	return unsubscribe;
             })
             .catch(error => alert(error.message));
             
@@ -50,7 +56,7 @@ export default function Login({navigation}) {
                 setUsers(users)
                 users.map(users => {
                     if(users.userID === id) {
-                        setUsername(users.username)
+                        setUsername(users.username)   
                     }
                 })
                 
@@ -61,12 +67,12 @@ export default function Login({navigation}) {
  // checks if user is signed in and redirects to home screen
     useEffect(() => {
 
-        const unsubscribe = auth.onAuthStateChanged(user => {
+        /*const unsubscribe = auth.onAuthStateChanged(user => {
             if (user) {
                 navigation.replace("Home Screen");
             }
         })      
-        return unsubscribe
+        return unsubscribe*/
     }, [])
 
     return (

@@ -7,6 +7,7 @@ import ChatPage from "./chatpage";
 import UserList from "./userList";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth } from '../firebase/firebase';
+import { firebase } from "../firebase/firebase";
 import { GlobalContext} from '../../globalContext';
 
 export default function Home({navigation}) {
@@ -14,12 +15,13 @@ export default function Home({navigation}) {
     const {username, setUsername} = useContext(GlobalContext);
     const {userID, setUserID} = useContext(GlobalContext);
     const [isUsernameSet, setIsUsernameSet] = useState();
-    const [users, setUsers] = useState([
-	{ id: 1, name: "Test User 1" },
-	{ id: 2, name: "Test User 2" },
-	{ id: 3, name: "Test User 3" }
-    ]);
+    let testUsers =[];
+    const [users, setUsers] = useState([]);
     
+    const conversationsRef = firebase.firestore().collection("Conversations");
+
+    const usersRef = firebase.firestore().collection("users");
+
     const HandleUserPress = (user) => { navigation.navigate("Chat Page", { user }); };
 
     const handleSubmit = () => {
@@ -58,6 +60,42 @@ export default function Home({navigation}) {
         if (username !== null) {
             setUsernameModalVisible(false);
         }
+	console.log("id: "+userID);
+	const pullUsers = async () => {
+		const queryA = conversationsRef.where("userA", "==", userID);
+		const usersA = await queryA.get();
+		const queryB = conversationsRef.where("userB", "==", userID);
+		const usersB = await queryB.get();
+		if (usersA.size > 0){
+			usersA.forEach(async (doc)=>{
+				const { userA, userB, convoID } = doc.data();
+				const userQuery = usersRef.where("userID", "==", userB);
+				const myUser = await userQuery.get();
+				if (myUser.size > 0){
+					myUser.forEach((doc) => {
+						const { username } = doc.data();
+						testUsers.push({id: userB,name: username,convoID:convoID});
+					});
+				}
+				setUsers([...testUsers]);
+			});
+		} else { console.log("no record"); }
+		if (usersB.size > 0) {
+			usersB.forEach(async (doc)=>{
+				const { userA, userB, convoID } = doc.data();
+				const userQuery = usersRef.where("userID", "==", userA);
+				const myUser = await userQuery.get();
+				if (myUser.size > 0){
+					myUser.forEach((doc) => {
+						const { username } = doc.data();
+						testUsers.push({id: userA,name: username,convoID:convoID});
+					});
+				}
+				setUsers([...testUsers]);
+			});
+		}
+	};
+	pullUsers();
           navigation.setOptions({
             headerRight: () => (
                 <TouchableOpacity onPress={() => signOut()}>
