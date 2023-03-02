@@ -1,11 +1,12 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {View, Text, TextInput, StyleSheet, 
         ScrollView, Modal, TouchableOpacity,
-        TouchableWithoutFeedback, Keyboard } from 'react-native'
+        TouchableWithoutFeedback, Keyboard, TouchableHighlight } from 'react-native'
 import Chat from "./chat";
 import ChatPage from "./chatpage";
 import UserList from "./userList";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from "@react-navigation/native";
 import { auth } from '../firebase/firebase';
 import { firebase } from "../firebase/firebase";
 import { GlobalContext} from '../../globalContext';
@@ -55,12 +56,12 @@ export default function Home({navigation}) {
                 navigation.navigate("Login")
             })
     }
-    
+    const isFocused = useIsFocused();
     useEffect(() => {
+	if (isFocused){
         if (username !== null) {
             setUsernameModalVisible(false);
         }
-	console.log("id: "+userID);
 	const pullUsers = async () => {
 		const queryA = conversationsRef.where("userA", "==", userID);
 		const usersA = await queryA.get();
@@ -68,13 +69,14 @@ export default function Home({navigation}) {
 		const usersB = await queryB.get();
 		if (usersA.size > 0){
 			usersA.forEach(async (doc)=>{
-				const { userA, userB, convoID } = doc.data();
+				const { userA, userB } = doc.data();
+				const { id } = doc;
 				const userQuery = usersRef.where("userID", "==", userB);
 				const myUser = await userQuery.get();
 				if (myUser.size > 0){
 					myUser.forEach((doc) => {
 						const { username } = doc.data();
-						testUsers.push({id: userB,name: username,convoID:convoID});
+						testUsers.push({id: userB,name: username,convoID: id});
 					});
 				}
 				setUsers([...testUsers]);
@@ -82,13 +84,14 @@ export default function Home({navigation}) {
 		} else { console.log("no record"); }
 		if (usersB.size > 0) {
 			usersB.forEach(async (doc)=>{
-				const { userA, userB, convoID } = doc.data();
+				const { userA, userB } = doc.data();
+				const { id } = doc;
 				const userQuery = usersRef.where("userID", "==", userA);
 				const myUser = await userQuery.get();
 				if (myUser.size > 0){
 					myUser.forEach((doc) => {
 						const { username } = doc.data();
-						testUsers.push({id: userA,name: username,convoID:convoID});
+						testUsers.push({id: userA,name: username,convoID: id});
 					});
 				}
 				setUsers([...testUsers]);
@@ -103,13 +106,21 @@ export default function Home({navigation}) {
                 </TouchableOpacity>
             )
         })
-   },[])
+	}
+   },[isFocused])
     
     return (
         <TouchableWithoutFeedback onPress={() => {
             Keyboard.dismiss();
-        }}>
+        }}><View>
+		<View style={ styles.btnWrapper }>
+	    		<TouchableHighlight style={ styles.button }
+	    			onPress={ () => { navigation.navigate("Find Users"); }}>
+	    			<Text style={{ color: "#fff" }}>Find Users</Text>
+	    		</TouchableHighlight>
+	    	</View>
 		<UserList users = { users } onPress={ HandleUserPress }/>
+	    	</View>
         </TouchableWithoutFeedback>
     )
 }
@@ -117,6 +128,14 @@ export default function Home({navigation}) {
 
 const styles = StyleSheet.create({
     container: {
+    },
+    button: {
+	textAlign: 'center',
+   	justifyContent: 'center',
+   	alignItems: 'center',
+	borderRadius: 30,
+    	width: '100%',
+    	height: 55,
     },
     input: {
         height: 55,

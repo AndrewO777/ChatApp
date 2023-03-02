@@ -4,6 +4,7 @@ import Login from '../screens/login'
 import Signup from '../screens/signup'
 import Home from '../screens/home'
 import ChatPage from "../screens/chatpage";
+import FindUsers from "../screens/findUsers";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { firebase } from '../firebase/firebase'
 import { GlobalContext } from '../../globalContext'
@@ -52,6 +53,11 @@ const {username, setUsername} = useContext(GlobalContext);
 	    		options={{ title: "Chatting",
 					headerBackVisable: true
 			}}
+	    	/>
+	    	<Stack.Screen
+	    		name="Find Users"
+	    		component={ FindUsers }
+	    		options={{  title: "Find Users" }}
 	    	/>
             </Stack.Navigator>
     )
