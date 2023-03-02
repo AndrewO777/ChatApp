@@ -25,6 +25,7 @@ export default function ChatPage({navigation,route}){
 			convoID: convoID,
 			sender: userID,
 			message: message,
+			createdAt: firebase.firestore.FieldValue.serverTimestamp()
 			});
 			console.log('New document added with ID:', newDocumentRef.id);
 		} catch (error) {
@@ -36,18 +37,15 @@ export default function ChatPage({navigation,route}){
 
 	useEffect(() => {
 		const messagesRef = firebase.firestore().collection("Messages");
-        messagesRef
-        .onSnapshot(
-            querySnapshot => {
-                const messages = []
-                querySnapshot.forEach((doc) => {
-					if (doc.data().convoID === convoID)
-                    messages.push({message:doc.data().message,sender:doc.data().sender})
-                })
-                setMessages(messages)
-				console.log('messages: ', messages)
-            }
-        )
+		const query = messagesRef.where("convoID", "==", convoID).orderBy("createdAt");
+		query.onSnapshot(querySnapshot => {
+			const tempMessages = [];
+			querySnapshot.forEach(doc =>{
+				const { message, sender, createdAt } = doc.data();
+				tempMessages.push({message: message, sender: sender, createdAt: createdAt, id: doc.id});
+			})
+			setMessages(tempMessages);
+		})
     }, []);
 
 	useEffect(() => {
