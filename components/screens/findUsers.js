@@ -57,17 +57,23 @@ export default function FindUsers({ navigation }){
 		navigation.navigate("Chat Page", { user });
 	}
 
+	useEffect(() => {
+		if (search.length > 0)
+		Search();
+		
+	}, [search])
+
 	//jsx
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={{ flex: 1, backgroundColor: '#c0c0c0'}}>
 			<View style={ styles.inputWrapper }>
 				<TextInput style={ styles.input }
 					placeholder="Search User"
 					onChangeText={ val => setSearch(val) }/>
-				<TouchableHighlight style={ styles.button }
+				{/* <TouchableHighlight style={ styles.button }
 					onPress={ () => Search() }>
 					<Text style={{ color: "#fff" }}>Search</Text>
-				</TouchableHighlight>
+				</TouchableHighlight> */}
 			</View>
 			<UserList users={ users } onPress={ UserPressed }/>
 		</View>
@@ -81,7 +87,7 @@ inputWrapper: {
 },
 input: {
     height: 55,
-    width: 250,
+    width: '90%',
     borderColor: '#000',
     borderWidth: 2,
     borderRadius: 30,

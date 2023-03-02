@@ -12,12 +12,13 @@ export default function UserList({ users, onPress }) {
 					<View style={ styles.item }>
 						<Image source={{ width:50,height:50,uri:"https://picsum.photos/50" }}
 							style={ styles.picture }/>
-						<Text>{ item.name }</Text>
+						<Text style={{color: 'white', fontSize: '20%'}}>{ item.name }</Text>
 					</View>
 				</TouchableHighlight>
 			)}
 			keyExtractor={(item) => item.id}
 		/>
+		
 	);
 }
 const styles = StyleSheet.create({
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
 		marginRight: 10,
 		flexDirection: "row",
 		alignItems: "center",
-		backgroundColor: "#00aeef",
+		backgroundColor: "#7eb09b",
 		borderRadius: 50
 	},
 	picture: {

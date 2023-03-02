@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,
         SafeAreaView, TouchableWithoutFeedback, Keyboard,
-        KeyboardAvoidingView} from 'react-native';
+        KeyboardAvoidingView, Platform} from 'react-native';
 import { auth } from '../firebase/firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { firebase } from '../firebase/firebase';
@@ -129,7 +129,7 @@ export default function Signup({navigation}) {
         Keyboard.dismiss();
     }}>
       <SafeAreaView style={styles.main}>
-        <KeyboardAvoidingView behavior='padding'>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'height'} >
         <View style={styles.container}>
         <View>
             <Text style={styles.welcome}>New Account</Text>
@@ -190,6 +190,7 @@ main: {
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
+    backgroundColor: '#c0c0c0',
 },
 container: {
     padding: 15,

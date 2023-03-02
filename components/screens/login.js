@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,
         Button, SafeAreaView, TouchableWithoutFeedback,
-         KeyboardAvoidingView, Keyboard } from 'react-native';
+         KeyboardAvoidingView, Keyboard, Platform } from 'react-native';
 import { auth } from '../firebase/firebase';
 import { firebase } from '../firebase/firebase';
 import { GlobalContext} from '../../globalContext';
@@ -80,7 +80,7 @@ export default function Login({navigation}) {
             Keyboard.dismiss();
         }}>
         <SafeAreaView style={styles.main}>
-        <KeyboardAvoidingView behavior='padding'>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'height'}>
         <View style={styles.container}>
         <View>
         </View>
@@ -130,6 +130,7 @@ main: {
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
+    backgroundColor: '#c0c0c0',
 },
 container: {
     padding: 15,

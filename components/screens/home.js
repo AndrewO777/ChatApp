@@ -110,9 +110,10 @@ export default function Home({navigation}) {
    },[isFocused])
     
     return (
+        <View style={{backgroundColor: '#c0c0c0', flex: 1}}>
         <TouchableWithoutFeedback onPress={() => {
             Keyboard.dismiss();
-        }}><View>
+        }}><View style={{backgroundColor: '#c0c0c0'}}>
 		<View style={ styles.btnWrapper }>
 	    		<TouchableHighlight style={ styles.button }
 	    			onPress={ () => { navigation.navigate("Find Users"); }}>
@@ -122,6 +123,7 @@ export default function Home({navigation}) {
 		<UserList users = { users } style={{ width: "100%" }} onPress={ HandleUserPress }/>
 	    	</View>
         </TouchableWithoutFeedback>
+        </View>
     )
 }
 
