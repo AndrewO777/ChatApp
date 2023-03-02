@@ -1,41 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { ScrollView, View, Text, TextInput, StyleSheet, TouchableHighlight } from "react-native";
 import { GlobalContext } from "../../globalContext";
-import { firebase, storage } from "../firebase/firebase";
+import { firebase, hooks } from "../firebase/firebase";
 import { AntDesign } from "@expo/vector-icons";
 
 
-
-//const reference = storage().ref('black-t-shirt-sm.png');
-
 export default function ChatPage({navigation,route}){
 	const [message, setMessage] = useState();
-	// const [messages, setMessages] = useState()
+	const [messages, setMessages] = useState()
 	const { user } = route.params;
 	const {convoID } = user;
 	const userID = user.id;
-	
-	
-
-	// const sendMessage = () => {
-    //     messagesRef
-    //     .onSnapshot(
-    //         querySnapshot => {
-    //             const messages = []
-    //             querySnapshot.forEach((doc) => {
-    //                 const { message, convoID, userID} = doc.data()
-    //                 messages.push({ 
-    //                     id: doc.id,
-    //                     convoID,
-    //                     userID,
-	// 					message
-    //                 })
-    //             })
-    //             // setMessages(messages)
-    //         }
-    //     )
-	// 		console.log('sent')
-    // };
 
 	const sendMessage = async () => {
 
@@ -59,6 +34,22 @@ export default function ChatPage({navigation,route}){
 	}
 
 	useEffect(() => {
+		const messagesRef = firebase.firestore().collection("Messages");
+        messagesRef
+        .onSnapshot(
+            querySnapshot => {
+                const messages = []
+                querySnapshot.forEach((doc) => {
+					if (doc.data().convoID === convoID)
+                    messages.push(doc.data().message)
+                })
+                setMessages(messages)
+				console.log('messages: ', messages)
+            }
+        )
+    }, []);
+
+	useEffect(() => {
 
 		navigation.setOptions({ title: "Chatting With "+user.name });
 	},[user,navigation]);
@@ -67,6 +58,11 @@ export default function ChatPage({navigation,route}){
 			<ScrollView>
 				<Text>{ user.name }</Text>
 			</ScrollView>
+			<View>
+				<Text>
+					{messages}
+				</Text>
+			</View>
 			
 			<View style={ styles.inputWrapper }>
 			{/* <View style={styles.addFileBtn}>

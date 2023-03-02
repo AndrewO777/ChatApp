@@ -2,7 +2,7 @@
 import firebase from 'firebase/compat/app';
 import { initializeApp } from "firebase/app";
 import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import { useCollectionData } from 'firebase/compat/firestore';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -28,5 +28,6 @@ else {
 }
 
 const auth = firebase.auth();
+
 
 export { auth, firebase};
