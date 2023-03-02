@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { ScrollView, View, Text, TextInput, StyleSheet, TouchableHighlight } from "react-native";
+import { ScrollView, View, Text, TextInput, StyleSheet, TouchableHighlight, FlatList, Image } from "react-native";
 import { GlobalContext } from "../../globalContext";
 import { firebase, hooks } from "../firebase/firebase";
 import { AntDesign } from "@expo/vector-icons";
@@ -10,7 +10,7 @@ export default function ChatPage({navigation,route}){
 	const [messages, setMessages] = useState()
 	const { user } = route.params;
 	const {convoID } = user;
-	const userID = user.id;
+	const { userID, setUserID } = useContext(GlobalContext);
 
 	const sendMessage = async () => {
 
@@ -41,7 +41,7 @@ export default function ChatPage({navigation,route}){
                 const messages = []
                 querySnapshot.forEach((doc) => {
 					if (doc.data().convoID === convoID)
-                    messages.push(doc.data().message)
+                    messages.push({message:doc.data().message,sender:doc.data().sender})
                 })
                 setMessages(messages)
 				console.log('messages: ', messages)
@@ -55,15 +55,19 @@ export default function ChatPage({navigation,route}){
 	},[user,navigation]);
 	return (
 		<View style={{ flex: 1 }}>
-			<ScrollView>
-				<Text>{ user.name }</Text>
-			</ScrollView>
-			<View>
-				<Text>
-					{messages}
-				</Text>
-			</View>
-			
+			<FlatList
+				data = { messages }
+				renderItem = {({ item }) => (
+					<View style={ item.sender == userID ? styles.itemMe : styles.item }>
+					{ item.sender != userID ? <Image 
+		source={{ width:50,height:50,uri:"https://picsum.photos/50"}} style={ styles.picture }/>
+						: null }
+						<Text>{ item.message }</Text>
+					</View>
+				)}
+				keyExtractor={(item) => item.id}
+			/>
+
 			<View style={ styles.inputWrapper }>
 			{/* <View style={styles.addFileBtn}>
 				<AntDesign
@@ -111,5 +115,34 @@ button: {
 	padding: 15,
 	paddingLeft: 20,
 	paddingRight: 20
+},
+item: {
+	padding: 10,
+	margin: 5,
+	marginLeft: 10,
+	marginRight: 10,
+	flexDirection: "row",
+	alignItems: "center",
+	backgroundColor: "#00aeef",
+	borderRadius: 50
+},
+itemMe: {
+	padding: 10,
+	margin: 5,
+	marginLeft: 10,
+	marginRight: 10,
+	flexDirection: "row",
+	alignItems: "center",
+	justifyContent: "right",
+	backgroundColor: "green",
+	borderRadius: 50
+},
+picture: {
+	marginRight: 10,
+	borderRadius: 50
+},
+center: {
+	alignItems: "center",
+	justifyContent: "center"
 }
 });
