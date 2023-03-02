@@ -20,9 +20,11 @@ export default function FindUsers({ navigation }){
 		if (res.size > 0){
 			let tempUsers = [];
 			res.forEach(doc => {
-				const { username, userID } = doc.data();
-				const user = { name: username, id: userID };
-				tempUsers.push(user);
+				const { username } = doc.data();
+				const myID = doc.data().userID;
+				const user = { name: username, id: myID };
+				if (user.id != userID)
+					tempUsers.push(user);
 			});
 			setUsers(tempUsers);
 		}

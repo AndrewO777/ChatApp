@@ -1,13 +1,17 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableHighlight, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TouchableHighlight, StyleSheet, Image, Dimensions } from 'react-native';
 
 export default function UserList({ users, onPress }) {
+	const screenWidth = Dimensions.get("window").width;
+
 	return (
-		<FlatList
+		<FlatList contentContainerStyle={ styles.center }
 			data = { users }
 			renderItem = {({ item }) => (
-				<TouchableHighlight onPress={() => onPress(item)}>
+				<TouchableHighlight onPress={() => onPress(item)} style={{ borderRadius: 30, width: screenWidth }}>
 					<View style={ styles.item }>
+						<Image source={{ width:50,height:50,uri:"https://picsum.photos/50" }}
+							style={ styles.picture }/>
 						<Text>{ item.name }</Text>
 					</View>
 				</TouchableHighlight>
@@ -18,6 +22,21 @@ export default function UserList({ users, onPress }) {
 }
 const styles = StyleSheet.create({
 	item: {
-		padding: 10
+		padding: 10,
+		margin: 5,
+		marginLeft: 10,
+		marginRight: 10,
+		flexDirection: "row",
+		alignItems: "center",
+		backgroundColor: "#00aeef",
+		borderRadius: 50
+	},
+	picture: {
+		marginRight: 10,
+		borderRadius: 50
+	},
+	center: {
+		alignItems: "center",
+		justifyContent: "center"
 	}
 });

@@ -119,7 +119,7 @@ export default function Home({navigation}) {
 	    			<Text style={{ color: "#fff" }}>Find Users</Text>
 	    		</TouchableHighlight>
 	    	</View>
-		<UserList users = { users } onPress={ HandleUserPress }/>
+		<UserList users = { users } style={{ width: "100%" }} onPress={ HandleUserPress }/>
 	    	</View>
         </TouchableWithoutFeedback>
     )
