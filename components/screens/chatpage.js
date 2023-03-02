@@ -12,6 +12,8 @@ export default function ChatPage({navigation,route}){
 	const {convoID } = user;
 	const { userID, setUserID } = useContext(GlobalContext);
 
+	const flatListRef = useRef(null);
+
 	const sendMessage = async () => {
 
 		console.log(user)
@@ -22,10 +24,10 @@ export default function ChatPage({navigation,route}){
 		try {
 			const messagesRef = firebase.firestore().collection("Messages");
 			const newDocumentRef = await messagesRef.add({
-			convoID: convoID,
-			sender: userID,
-			message: message,
-			createdAt: firebase.firestore.FieldValue.serverTimestamp()
+				convoID: convoID,
+				sender: userID,
+				message: message,
+				createdAt: firebase.firestore.FieldValue.serverTimestamp()
 			});
 			console.log('New document added with ID:', newDocumentRef.id);
 		} catch (error) {
@@ -53,8 +55,15 @@ export default function ChatPage({navigation,route}){
 		navigation.setOptions({ title: "Chatting With "+user.name });
 	},[user,navigation]);
 
-		const flatListRef = useRef();
 	
+
+	const data = messages 
+
+	const ScrollToBottom = () => {
+		if (data && data.length > 0) {
+			flatListRef.current.scrollToEnd();
+		}
+	};
 
 
 
@@ -68,7 +77,7 @@ export default function ChatPage({navigation,route}){
 		<View style={{marginBottom: 100, flex: 1}}>
 			<FlatList
 				ref={flatListRef}
-				data = { messages }
+				data = { data }
 				renderItem = {({ item }) => (
 					<View style={ item.sender == userID ? styles.itemMe : styles.item }>
 							{ item.sender != userID ? <Image 
@@ -78,8 +87,8 @@ export default function ChatPage({navigation,route}){
 					</View>
 				)}
 				keyExtractor={(item) => item.id}
-				onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: false})}
-				contentContainerStyle={{ paddingBottom: 100}}
+				onContentSizeChange={() => ScrollToBottom()}
+				// contentContainerStyle={{ paddingBottom: 100}}
 			/>
 			</View>
 				<KeyboardAvoidingView 

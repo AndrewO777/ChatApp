@@ -15,7 +15,7 @@ export default function FindUsers({ navigation }){
 
 	//functions
 	const Search = async () => {
-		const query = usersRef.where("username", "==", search);
+		const query = usersRef.where("username", ">=", search);
 		const res = await query.get();
 		if (res.size > 0){
 			let tempUsers = [];
