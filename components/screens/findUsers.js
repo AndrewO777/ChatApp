@@ -54,7 +54,7 @@ export default function FindUsers({ navigation }){
 			});
 		}
 		console.log(user.convoID);
-		navigation.navigate("Chat Page", { user });
+		navigation.replace("Chat Page", { user });
 	}
 
 	useEffect(() => {
