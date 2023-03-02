@@ -123,6 +123,7 @@ item: {
 	marginRight: 10,
 	flexDirection: "row",
 	alignItems: "center",
+	alignSelf: "start",
 	backgroundColor: "#00aeef",
 	borderRadius: 50
 },
@@ -133,6 +134,7 @@ itemMe: {
 	marginRight: 10,
 	flexDirection: "row",
 	alignItems: "center",
+	alignSelf: "flex-end",
 	justifyContent: "right",
 	backgroundColor: "green",
 	borderRadius: 50
