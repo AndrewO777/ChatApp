@@ -30,7 +30,7 @@ export default function Signup({navigation}) {
 
     const [users, setUsers] = useState([]);
     const usersRef = firebase.firestore().collection('users');
-    const [userID, setUserID] = useState();
+    const { userID, setUserID } = useContext(GlobalContext);
 
     let id;
 
@@ -82,8 +82,10 @@ export default function Signup({navigation}) {
 
             .then(userCredentials => {
                 const user = userCredentials.user;
+		    console.log(userCredentials);
                 const id = user.uid;
-                AsyncStorage.setItem('userID', id);
+		    console.log(id)
+                //AsyncStorage.setItem('userID', id);
                 console.log('Registered with: ', user.email);
                 const data = {
                     userID: id,
@@ -93,13 +95,13 @@ export default function Signup({navigation}) {
                 console.log(userID);
                 usersRef
                 .add(data)
-                
+                navigation.navigate("Login");
 
             })
             .catch((error) => {alert(error.message)})
 
             try {
-                await AsyncStorage.setItem('user', username);
+                //await AsyncStorage.setItem('user', username);
                 // await AsyncStorage.setItem('userID', userID);
             } catch (error) {
                     alert(error)
@@ -129,7 +131,7 @@ export default function Signup({navigation}) {
         Keyboard.dismiss();
     }}>
       <SafeAreaView style={styles.main}>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'height'} >
+        <KeyboardAvoidingView behavior={"padding"} >
         <View style={styles.container}>
         <View>
             <Text style={styles.welcome}>New Account</Text>
