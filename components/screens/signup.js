@@ -82,26 +82,27 @@ export default function Signup({navigation}) {
 
             .then(userCredentials => {
                 const user = userCredentials.user;
-		    console.log(userCredentials);
+		    // console.log(userCredentials);
                 const id = user.uid;
-		    console.log(id)
-                //AsyncStorage.setItem('userID', id);
+		        console.log(id)
+                // AsyncStorage.setItem('userID', id);
                 console.log('Registered with: ', user.email);
                 const data = {
                     userID: id,
                     username: username
                 };
                 setUserID(id);
-                console.log(userID);
+                console.log(id);
                 usersRef
                 .add(data)
-                navigation.navigate("Login");
+                //navigation.navigate("Login");
+                navigation.replace("Home Screen")
 
             })
             .catch((error) => {alert(error.message)})
 
             try {
-                //await AsyncStorage.setItem('user', username);
+                // await AsyncStorage.setItem('user', username);
                 // await AsyncStorage.setItem('userID', userID);
             } catch (error) {
                     alert(error)
