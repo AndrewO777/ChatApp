@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { ScrollView, View, Text, TextInput, StyleSheet, TouchableHighlight, TouchableWithoutFeedback, FlatList, Image, KeyboardAvoidingView, Keyboard, SafeAreaView, Platform} from "react-native";
 import { GlobalContext } from "../../globalContext";
-import { firebase, hooks, storage } from "../firebase/firebase";
-import { ref, uploadBytes } from "firebase/storage";
+import { firebase, hooks } from "../firebase/firebase";
+import { ref, uploadBytes, getStorage } from "firebase/storage";
 import { AntDesign, MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
 import * as MediaLibrary from "expo-media-library";
+import * as FileSystem from "expo-file-system";
 
 
 export default function ChatPage({navigation,route}){
@@ -70,18 +71,21 @@ export default function ChatPage({navigation,route}){
 	};
 
 	const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
+
 	async function AddFile() {
 		try {
 			MediaLibrary.requestPermissionsAsync()
 			if (permissionResponse.granted);
 			{
+				const storage = getStorage();
 				const result = await DocumentPicker.getDocumentAsync();
-				console.log(result.uri);
-				const res = await fetch(result.uri);
-				const blob = await res.file;
+				console.log(result);
+				const file = await fetch(result.uri);
+				const storageRef = ref(storage, "test.png");
+				const blob = await file.blob();
 				const fileName = result.name;
-				const storageRef = ref(storage, fileName);
-				uploadBytes(storageRef, blob).then((snapshot)=>{console.log(snapshot)});
+				//throw Error("l");
+				await uploadBytes(storageRef, blob);
 			}
 		} catch(error) {
 			console.log(error);
@@ -118,14 +122,14 @@ export default function ChatPage({navigation,route}){
 					keyboardVerticalOffset={60}
 				>
 					<View style={ styles.inputWrapper }>
-						<View style={styles.addFileBtn}>
+		{/*<View style={styles.addFileBtn}>
 							<Ionicons
 								name='document-attach'
 								size={40}
 								color='#3d3d3d'
 								onPress={() => {AddFile()}}
 							/>
-						</View>
+						</View>*/}
 							<TextInput
 								style={ styles.input }
 								onChangeText={(val) => setMessage(val)}
