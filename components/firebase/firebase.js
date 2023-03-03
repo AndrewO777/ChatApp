@@ -2,6 +2,7 @@
 import firebase from 'firebase/compat/app';
 import { initializeApp } from "firebase/app";
 import 'firebase/compat/auth';
+import { getStorage, ref } from "firebase/storage";
 import { useCollectionData } from 'firebase/compat/firestore';
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -29,5 +30,6 @@ else {
 
 const auth = firebase.auth();
 
+const storage = getStorage(app);
 
-export { auth, firebase};
+export { auth, firebase, storage };

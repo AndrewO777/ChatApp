@@ -19,7 +19,12 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.company.ChatApp"
+      "bundleIdentifier": "com.company.ChatApp",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow access to your camera to take photos and videos",
+        "NSPhotoLibraryAddUsageDescription": "Allow access to your photo library to save photos and videos",
+        "NSPhotoLibraryUsageDescription": "Allow access to your photo library to select photos and videos"
+      }
     },
     "android": {
       "package": "com.company.ChatApp",

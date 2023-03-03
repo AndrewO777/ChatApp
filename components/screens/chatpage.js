@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { ScrollView, View, Text, TextInput, StyleSheet, TouchableHighlight, TouchableWithoutFeedback, FlatList, Image, KeyboardAvoidingView, Keyboard, SafeAreaView, Platform} from "react-native";
 import { GlobalContext } from "../../globalContext";
-import { firebase, hooks } from "../firebase/firebase";
+import { firebase, hooks, storage } from "../firebase/firebase";
+import { ref, uploadBytes } from "firebase/storage";
 import { AntDesign, MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import * as DocumentPicker from "expo-document-picker";
+import * as MediaLibrary from "expo-media-library";
 
 
 export default function ChatPage({navigation,route}){
@@ -11,6 +14,7 @@ export default function ChatPage({navigation,route}){
 	const { user } = route.params;
 	const {convoID } = user;
 	const { userID, setUserID } = useContext(GlobalContext);
+	const [fileUri, setFileUri] = useState("");
 
 	const flatListRef = useRef(null);
 
@@ -65,6 +69,24 @@ export default function ChatPage({navigation,route}){
 		}
 	};
 
+	const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
+	async function AddFile() {
+		try {
+			MediaLibrary.requestPermissionsAsync()
+			if (permissionResponse.granted);
+			{
+				const result = await DocumentPicker.getDocumentAsync();
+				console.log(result.uri);
+				const res = await fetch(result.uri);
+				const blob = await res.file;
+				const fileName = result.name;
+				const storageRef = ref(storage, fileName);
+				uploadBytes(storageRef, blob).then((snapshot)=>{console.log(snapshot)});
+			}
+		} catch(error) {
+			console.log(error);
+		}
+	}
 
 
 	return (
@@ -101,7 +123,7 @@ export default function ChatPage({navigation,route}){
 								name='document-attach'
 								size={40}
 								color='#3d3d3d'
-								onPress={() => console.log('pressed')}
+								onPress={() => {AddFile()}}
 							/>
 						</View>
 							<TextInput
